@@ -155,7 +155,7 @@ console.print(":sparkles: [bold green]Iniciando el proceso de creación de embed
 console.print(":wastebasket: [yellow]Eliminando la colección anterior de Qdrant (si existe)...[/yellow]")
 recreate_qdrant_collection()
 
-markdown_dir_path = "/workspaces/hoy-empiezo-con-ia-generativa/rag/youtube_guides"
+markdown_dir_path = "youtube_guides"
 markdown_files = get_markdown_files(markdown_dir_path)
 console.print(f":mag: [cyan]Se encontraron [bold]{len(markdown_files)}[/bold] archivos Markdown para procesar.[/cyan]")
 

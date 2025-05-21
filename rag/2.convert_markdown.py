@@ -11,7 +11,7 @@ console = Console()
 
 load_dotenv()
 
-markdown_file_path = "/workspaces/hoy-empiezo-con-ia-generativa/rag/youtube_guides/configurar_la_audiencia_de_un_canal_o_un_vídeo.md"
+markdown_file_path = "youtube_guides/ficzone.md"
 
 client = OpenAI(
     base_url=os.getenv("GITHUB_MODELS_URL"),

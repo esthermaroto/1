@@ -11,32 +11,17 @@ console = Console()
 
 # Para este ejemplo usamos documentación de YouTube relacionadas con los canales y sus vídeos
 URLs = [
-    {"url": "https://support.google.com/youtube/answer/9527654?hl=es", "name": "Configurar la audiencia de un canal o un vídeo"},
-    {"url": "https://support.google.com/youtube/answer/11913617?sjid=11557296865847177507-EU", "name": "Consejos para subir vídeos de YouTube"},
-    {"url": "https://support.google.com/youtube/answer/11908409?sjid=11557296865847177507-EU", "name": "Consejos para optimizar vídeos"},
-    {"url": "https://support.google.com/youtube/answer/12340300?sjid=11557296865847177507-EU", "name": "Consejos sobre miniaturas y títulos"},
-    {"url": "https://support.google.com/youtube/answer/12948449?sjid=11557296865847177507-EU", "name": "Consejos para las descripciones de los vídeos"},
-    {"url": "https://support.google.com/youtube/answer/13616979?sjid=11557296865847177507-EU", "name": "Consejos para programar subidas"},
-    {"url": "https://support.google.com/youtube/answer/11913513?sjid=11557296865847177507-EU", "name": "Consejos sobre equipos de vídeo"},
-    {"url": "https://support.google.com/youtube/answer/12340105?sjid=11557296865847177507-EU", "name": "Consejos de grabación"},
-    {"url": "https://support.google.com/youtube/answer/12948118?sjid=11557296865847177507-EU", "name": "Consejos para grabar con un dispositivo móvil"},
-    {"url": "https://support.google.com/youtube/answer/11221953?sjid=11557296865847177507-EU", "name": "Consejos para editar vídeos"},
-    {"url": "https://support.google.com/youtube/answer/15575746?sjid=11557296865847177507-EU", "name": "Consejos para las retiradas por infracción de derechos de autor"},
-    {"url": "https://support.google.com/youtube/answer/15577610?sjid=11557296865847177507-EU", "name": "Consejos para encontrar música de uso autorizado"},
-    {"url": "https://support.google.com/youtube/answer/11912631?sjid=11557296865847177507-EU", "name": "Consejos sobre las publicaciones"},
-    {"url": "https://support.google.com/youtube/answer/12929858?sjid=11557296865847177507-EU", "name": "Consejos para conseguir más acuerdos de marca"},
-    {"url": "https://support.google.com/youtube/answer/11912533?sjid=11557296865847177507-EU", "name": "Consejos para ganar dinero en YouTube"},
-    {"url": "https://support.google.com/youtube/answer/13615784?sjid=11557296865847177507-EU", "name": "Consejos sobre usuarios nuevos y recurrentes"},
-    {"url": "https://support.google.com/youtube/answer/13616340?sjid=11557296865847177507-EU", "name": "Consejos para saber qué contenido crear"},
-    {"url": "https://support.google.com/youtube/answer/11912632?sjid=11557296865847177507-EU", "name": "Consejos sobre Estadísticas de YouTube"},
-    {"url": "https://support.google.com/youtube/answer/11914225?sjid=11557296865847177507-EU", "name": "Consejos de búsqueda y descubrimiento"},
-    {"url": "https://support.google.com/youtube/answer/15086271?sjid=11557296865847177507-EU", "name": "Consejos para evitar que disminuya el tiempo de visualización"},
-    {"url": "https://support.google.com/youtube/answer/12950272?sjid=11557296865847177507-EU", "name": "Consejos sobre el banner del canal y la imagen de perfil"},
-    {"url": "https://support.google.com/youtube/answer/12356784?sjid=11557296865847177507-EU", "name": "Consejos sobre los estrenos de YouTube"},
+    {"url": "https://www.ficzone.com/programacion-ficzone-granada-gaming-meeple-factory/", "name": "Programación FicZone"},
+    {"url": "https://www.ficzone.com/wp-content/uploads/2025/05/ficzone-sabado-2025.pdf", "name": "Horario FicZone Sábado"},
+    {"url": "https://www.ficzone.com/wp-content/uploads/2025/05/ficzone-domingo-2025.pdf", "name": "Horario FicZone Domingo"},
+    {"url": "https://www.granadagaming.com/", "name": "Granada Gaming"},
+    {"url": "https://www.meeplefactory.es/", "name": "Meeple Factory"},
+    {"url": "https://www.ficzone.com/", "name": "FicZone"},
+    {"url": "https://www.ficzone.com/invitados-2025/", "name": "Invitados"},
 ]
 
 # Se crea un directorio para guardar los archivos si no existe
-output_dir = "/workspaces/hoy-empiezo-con-ia-generativa/rag/youtube_guides"
+output_dir = "./youtube_guides"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
     console.print(f":file_folder: [bold green]Directorio creado:[/bold green] {output_dir}")
@@ -54,7 +39,13 @@ for item in URLs:
     name = item["name"]
     
     # Convertir la URL a contenido markdown
-    result = md.convert(url)
+    try:
+        result = md.convert(url, headers={
+             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+        })
+    except Exception as e:
+        console.print(f":x: [bold red]Error al convertir:[/bold red] {url}\n{e}")
+        continue
     
     # Crear nombre de archivo válido
     filename = create_valid_filename(name) + ".md"
