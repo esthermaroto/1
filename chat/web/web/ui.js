@@ -140,11 +140,11 @@ async function sendMessage() {
 
         const data = await response.json();
         
-        // Añadir respuesta del bot
+        // Añadir respuesta del bot con mejor manejo de errores
         if (data.response) {
             addMessage(data.response, false);
         } else {
-            addMessage('Lo siento, no pude obtener una respuesta válida del servidor.', false);
+            addMessage('Lo siento, parece que hubo un problema al procesar tu mensaje. ¿Podrías intentarlo de nuevo?', false);
             console.error('Respuesta inesperada del servidor:', data);
         }
 
@@ -153,7 +153,18 @@ async function sendMessage() {
         if (typingIndicator && typingIndicator.parentNode) {
             typingIndicator.remove();
         }
-        addMessage(`Lo siento, ha ocurrido un error: ${error.message}`, false);
+        
+        // Mensajes de error más amigables
+        let errorMessage = 'Lo siento, ha ocurrido un error al procesar tu mensaje. ';
+        if (error.message.includes('Failed to fetch')) {
+            errorMessage += 'Parece que hay un problema de conexión. Por favor, verifica tu conexión a internet e inténtalo de nuevo.';
+        } else if (error.message.includes('timeout')) {
+            errorMessage += 'La solicitud está tomando más tiempo de lo esperado. Por favor, inténtalo de nuevo en unos momentos.';
+        } else {
+            errorMessage += 'Por favor, inténtalo de nuevo más tarde.';
+        }
+        
+        addMessage(errorMessage, false);
     }
 }
 
@@ -180,10 +191,10 @@ window.addEventListener('load', () => {
      chatInput.style.height = (chatInput.scrollHeight) + 'px';
 });
 
-// Mensaje de bienvenida al cargar la página
+// Mensaje de bienvenida más amigable
 window.addEventListener('DOMContentLoaded', () => {
     // Pequeño retraso para la animación
     setTimeout(() => {
-        addMessage('¡Hola! Soy el asistente de FicZone. ¿En qué puedo ayudarte hoy?', false);
+        addMessage('¡Hola! 👋 Soy tu asistente virtual. Estoy aquí para ayudarte con cualquier pregunta que tengas. ¿En qué puedo ayudarte hoy?', false);
     }, 300);
 });

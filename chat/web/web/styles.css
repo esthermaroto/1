@@ -48,38 +48,38 @@ body {
 }
 
 .container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    height: calc(100vh - 4rem);
+    max-width: none; /* Permitir que el contenedor principal ocupe todo el ancho */
+    margin: 0 auto; /* Centrar el contenido dentro de la página */
+    padding: 0 1rem; /* Añadir padding lateral para que el contenido no toque los bordes */
+    height: 100vh; /* Ocupar toda la altura de la ventana */
     display: flex;
     flex-direction: column;
 }
 
 .header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 0; /* Eliminar margen inferior del header */
     background-color: var(--panel-bg);
-    padding: 1.5rem;
-    border-radius: 8px;
+    padding: 0.3rem 1.5rem; /* Reducir aún más padding vertical */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 0; /* Eliminar border-radius */
 }
 
 .ficzone-logo {
-    max-width: 150px; /* Ajusta el tamaño máximo del logo */
+    max-width: 150px;
     height: auto;
-    margin-bottom: 1rem; /* Espacio debajo del logo */
+    margin-bottom: 0.5rem; /* Reducir margen inferior del logo */
 }
 
 .header h1 {
     color: var(--primary-color);
     font-size: 2rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem; /* Reducir margen inferior del h1 */
     font-weight: 600;
-    display: flex; /* Usar flexbox para alinear la imagen y el texto */
+    display: flex;
     align-items: center;
-    justify-content: center; /* Centrar contenido horizontalmente */
-    gap: 0.5rem; /* Espacio entre la imagen y el texto */
+    justify-content: center;
+    gap: 0.3rem; /* Reducir espacio entre logo y título */
 }
 
 .header-robot-icon {
@@ -101,6 +101,9 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    max-width: 800px; /* Limitar el ancho del área del chat */
+    width: 100%; /* Asegurar que ocupe el ancho disponible hasta max-width */
+    margin: 0 auto; /* Centrar el área del chat */
 }
 
 .chat-history {
@@ -114,26 +117,38 @@ body {
 .message {
     margin-bottom: 1rem;
     padding: 0.8rem 1rem;
-    border-radius: 8px;
+    border-radius: 12px;
     max-width: 80%;
     font-size: 0.95rem;
     word-wrap: break-word;
-    display: flex; /* Usar flexbox para alinear avatar y burbuja */
+    display: flex;
     align-items: flex-start;
     gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.message:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .message .avatar {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background-color: var(--panel-border); /* Fondo simple para avatar */
+    background-color: var(--panel-border);
     color: var(--text-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
-    overflow: hidden; /* Asegura que la imagen se recorte a la forma redonda */
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.message:hover .avatar {
+    transform: scale(1.05);
 }
 
 .chat-bot-avatar {
@@ -147,22 +162,77 @@ body {
     background-color: var(--bot-message-bg);
     margin-right: auto;
     border-left: 3px solid var(--secondary-color);
-}
-
-.bot-message .bubble {
-    flex-grow: 1;
+    animation: slideInLeft 0.3s ease;
 }
 
 .user-message {
     background-color: var(--user-message-bg);
     color: var(--user-message-color);
     margin-left: auto;
-    /* border-right: 3px solid var(--user-message-bg); /* Opcional */
+    border-right: 3px solid var(--primary-color);
+    animation: slideInRight 0.3s ease;
 }
 
-.user-message .bubble {
-     flex-grow: 1;
-     order: -1; /* Coloca la burbuja antes del avatar en mensajes de usuario */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.bubble {
+    line-height: 1.5;
+    padding: 0.2rem 0;
+}
+
+.bubble p {
+    margin: 0.5rem 0;
+}
+
+.bubble p:first-child {
+    margin-top: 0;
+}
+
+.bubble p:last-child {
+    margin-bottom: 0;
+}
+
+/* Estilos para el indicador de escritura */
+.typing-indicator .bubble {
+    display: flex;
+    gap: 4px;
+    padding: 8px 12px;
+}
+
+.typing-indicator .bubble span {
+    width: 8px;
+    height: 8px;
+    background-color: var(--text-secondary);
+    border-radius: 50%;
+    animation: typing 1s infinite ease-in-out;
+}
+
+.typing-indicator .bubble span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator .bubble span:nth-child(3) {
+    animation-delay: 0.4s;
 }
 
 .chat-input-area {

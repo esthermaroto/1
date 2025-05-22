@@ -54,61 +54,54 @@ def generate_response_with_embeddings(query, search_results):
     # Inicializar el tokenizador (puede variar si se usa Google AI, pero tiktoken es común)
     # Es posible que necesites ajustar el cálculo de tokens o usar una librería diferente para modelos Gemini
     encoding = tiktoken.get_encoding("cl100k_base") # Esto es para modelos de OpenAI, ten cuidado aquí.
-    
-    # Calcular tokens para el prompt del sistema y la consulta
-    system_prompt = ("Eres un asistente experto en todo lo relacionado al evento FicZone."
-                     "Tu tarea es responder a las preguntas de los usuarios utilizando la información proporcionada en el contexto."
-                     "Si la información no es suficiente, indícalo y sugiere buscar más información."
-                     "Siempre añade la referencia a la fuente de información utilizada para responder, en fragmento si es posible, y al final de la respuesta, utilizando el formato: "
-                     "Referencia: [nombre del archivo] [parte del archivo]")
-    
-    # Estos cálculos de tokens pueden no ser precisos para modelos Gemini con tiktoken.
-    system_tokens = len(encoding.encode(system_prompt))
-    query_tokens = len(encoding.encode(query))
-    
-    # Reservar tokens para la respuesta (aproximadamente 1000 tokens)
-    reserved_tokens = 1000
-    
-    # Calcular tokens máximos disponibles para el contexto
-    max_context_tokens = 8000 - system_tokens - query_tokens - reserved_tokens # Ten cuidado con el contexto para Gemini
-    
+
+    # Construir el contexto con la información relevante
     context = ""
-    current_tokens = 0
-    
     for i, result in enumerate(search_results):
         title = result.payload.get("titulo", "Sin título")
         part = result.payload.get("parte", 0)
         file_name = result.payload.get("archivo", "Sin archivo")
+        context += f"\n--- Información relevante #{i+1} (de {title}, archivo {file_name}, parte {part}) ---\n"
         chunk_text = result.payload.get("text", "No hay texto disponible")
-        
-        # Calcular tokens para este fragmento (también puede ser inexacto con tiktoken para Gemini)
-        chunk_header = f"\n--- Información relevante #{i+1} (de {title}, archivo {file_name}, parte {part}) ---\n"
-        chunk_tokens = len(encoding.encode(chunk_header + chunk_text))
-        
-        # Si añadir este fragmento excedería el límite, detenerse aquí
-        if current_tokens + chunk_tokens > max_context_tokens:
-            break
-            
-        context += chunk_header + chunk_text + "\n"
-        current_tokens += chunk_tokens
+        context += chunk_text + "\n"
 
-    prompt = f"""Responde a la siguiente consulta utilizando la información proporcionada.\n                Si la información proporcionada no es suficiente para responder, puedes indicarlo.\n\n                Contexto:\n                {context}\n\n                Consulta: {query}\n\n                Respuesta:"""
+    # Crear un prompt más amigable, conciso y sin mención de fuentes
+    prompt = f"""Por favor, responde a la siguiente consulta de manera amigable, profesional y muy concisa, utilizando la información proporcionada.
+                Sé directo y ve al punto, evitando cualquier rodeos innecesario.
+                **NUNCA menciones los archivos o fuentes de donde obtuviste la información.**
+                Si la información proporcionada no es suficiente para responder, indícalo de manera cordial y sugiere buscar más información externa.
 
-    console.print(":robot: [bold cyan]Generando respuesta con el modelo...[/bold cyan]")
-    
-    # Get the model name from environment variables
-    generation_model_name = os.getenv("GITHUB_MODELS_MODEL_FOR_GENERATION")
+                Contexto:
+                {context}
 
-    # Create a GenerativeModel instance
-    # generation_model = genai.GenerativeModel(generation_model_name) # This instance is not used
+                Consulta: {query}
 
-    # Generate content using the model instance
-    # response = generation_model.generate_content( # This call is not used
-    #     prompt
-    # )
-    
-    # Usar el modelo de generación de Google AI
-    print(f"DEBUG: GOOGLE_API_KEY value before generate_content: {os.getenv("GOOGLE_API_KEY")}") # Added debug print
+                Instrucciones clave para la respuesta:
+                1. Sé amigable y conversacional, pero siempre directo.
+                2. Proporciona la respuesta solicitada de la manera más concisa posible.
+                3. **NO menciones NUNCA las fuentes de información (archivos, documentos, etc.).**
+                4. Usa lenguaje claro y accesible.
+                5. Si la información es insuficiente, dilo claramente y de forma cordial.
+                6. Cuando presentes listas, usa viñetas o números.
+
+                Respuesta concisa:"""
+
+    # Configurar el modelo con un prompt del sistema reforzado en concisión y sin fuentes
+    system_prompt = """Eres un asistente experto y amigable especializado en creación de contenido para YouTube.
+                      Tu objetivo es ayudar a los usuarios de manera cordial, profesional, muy directa y concisa.
+                      Características de tus respuestas:
+                      - Usa un tono conversacional y cercano, pero siempre ve al grano.
+                      - Sé empático y comprensivo.
+                      - Proporciona información clara y bien estructurada de forma breve.
+                      - **Eres EXTREMADAMENTE directo y conciso. Evita cualquier frase o información que no sea estrictamente necesaria para responder la consulta.**
+                      - Incluye ejemplos prácticos SOLO si son esenciales y cortos.
+                      - Si no tienes suficiente información, indícalo de manera cordial y sin rodeos.
+                      - Mantén un balance entre profesionalismo y extrema concisión.
+                      - Cuando presentes listas de elementos (ej. nombres, horarios), formatéalos claramente usando viñetas o números para facilitar la lectura, pero mantén la lista lo más breve posible.
+                      - **Bajo NINGUNA circunstancia menciones las fuentes de información (archivos, documentos, fragmentos, etc.). Actúa como si la información fuera de tu conocimiento general.**
+                      - **NO inicies tus respuestas con saludos como 'Hola', '¡Hola!', etc. Ve directamente a responder la consulta.**"""
+
+    # Added debug print
     model = genai.GenerativeModel(GENERATION_MODEL)
     response = model.generate_content(
         [{"role": "user", "parts": [prompt]}]

@@ -16,6 +16,16 @@ import google.generativeai as genai # Importamos la librería de Google AI
 load_dotenv()
 console = Console()
 
+# Configure Google AI API explicitly in this script
+print(f"DEBUG: GOOGLE_API_KEY value after load_dotenv in 3.store_embeddings.py: {os.getenv("GOOGLE_API_KEY")}") # Added debug print
+genai.configure(
+    api_key=os.getenv("GOOGLE_API_KEY")
+)
+
+# Setup project root path (assuming script is in rag/)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.join(SCRIPT_DIR, "..") # One level up from rag
+
 collection_name = os.getenv("QDRANT_COLLECTION_NAME")
 
 # genai.configure(api_key=os.getenv("GITHUB_TOKEN")) # Commenting out this line
@@ -152,7 +162,7 @@ def process_markdown_files(markdown_files):
 
 console.print(":sparkles: [bold green]Iniciando el proceso de creación de embeddings...[/bold green]")
 
-markdown_dir_path = "../youtube_guides"
+markdown_dir_path = os.path.join(PROJECT_ROOT, "info-ficzone") # Use PROJECT_ROOT for explicit path
 markdown_files = get_markdown_files(markdown_dir_path)
 console.print(f":mag: [cyan]Se encontraron [bold]{len(markdown_files)}[/bold] archivos Markdown para procesar.[/cyan]")
 
