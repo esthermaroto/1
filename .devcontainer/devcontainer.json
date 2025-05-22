@@ -19,7 +19,7 @@
 		}
 	},
 	"hostRequirements": {
-		"memory": "16gb",
+		"memory": "15gb",
 		"cpus": 4
 	},
 	"forwardPorts": [

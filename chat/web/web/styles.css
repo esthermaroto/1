@@ -1,0 +1,787 @@
+/* Estilos base */
+:root {
+    --primary-color: #A78BFA; /* Morado claro */
+    --primary-dark: #cc0000;
+    --secondary-color: #84CC16; /* Verde lima */
+    --glow-color: rgba(255, 58, 58, 0.5);
+    --text-color: #1F2937; /* Texto oscuro para contraste */
+    --text-secondary: #6B7280; /* Texto secundario gris */
+    --bg-dark: #121212;
+    --bg-card: #1e1e1e;
+    --bg-message: #2a2a2a;
+    --bg-user-message: #444;
+    --accent-color: #ff5252;
+    --magic-color-1: #ff42a1;
+    --magic-color-2: #4e42ff;
+    --magic-color-3: #42d6ff;
+    --border-color: #333;
+    --shadow-soft: 0 2px 8px rgba(0,0,0,0.2);
+    --shadow-glow: 0 0 12px 2px var(--primary-color), 0 0 24px 4px var(--glow-color);
+    --user-avatar-gradient-1: #4e42ff;
+    --user-avatar-gradient-2: #42d6ff;
+    --background-color: #F9FAFB; /* Fondo muy claro */
+    --chat-bg: #FFFFFF; /* Fondo del chat blanco */
+    --bot-message-bg: #E5E7EB; /* Gris muy claro para mensajes del bot */
+    --user-message-bg: #A78BFA; /* Morado claro para mensajes del usuario */
+    --user-message-color: #FFFFFF; /* Texto blanco para mensajes del usuario */
+    --panel-bg: #FFFFFF; /* Fondo de paneles blanco */
+    --panel-border: #D1D5DB; /* Borde gris claro */
+    --typing-indicator-color: #84CC16; /* Indicador de escritura verde */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    height: calc(100vh - 4rem);
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+    background-color: var(--panel-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ficzone-logo {
+    max-width: 150px; /* Ajusta el tamaño máximo del logo */
+    height: auto;
+    margin-bottom: 1rem; /* Espacio debajo del logo */
+}
+
+.header h1 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    display: flex; /* Usar flexbox para alinear la imagen y el texto */
+    align-items: center;
+    justify-content: center; /* Centrar contenido horizontalmente */
+    gap: 0.5rem; /* Espacio entre la imagen y el texto */
+}
+
+.header-robot-icon {
+    height: 2em; /* Aumentado de nuevo la altura */
+    width: auto;
+    vertical-align: middle; /* Alinear verticalmente con el texto */
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.chat-container {
+    background-color: var(--chat-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: var(--background-color);
+    -webkit-overflow-scrolling: touch;
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    max-width: 80%;
+    font-size: 0.95rem;
+    word-wrap: break-word;
+    display: flex; /* Usar flexbox para alinear avatar y burbuja */
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.message .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--panel-border); /* Fondo simple para avatar */
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    overflow: hidden; /* Asegura que la imagen se recorte a la forma redonda */
+}
+
+.chat-bot-avatar {
+    display: block; /* Eliminar espacio extra debajo de la imagen */
+    width: 100%; /* Asegura que la imagen llene el contenedor del avatar */
+    height: 100%; /* Asegura que la imagen llene el contenedor del avatar */
+    object-fit: cover; /* Cubre el área manteniendo la proporción */
+}
+
+.bot-message {
+    background-color: var(--bot-message-bg);
+    margin-right: auto;
+    border-left: 3px solid var(--secondary-color);
+}
+
+.bot-message .bubble {
+    flex-grow: 1;
+}
+
+.user-message {
+    background-color: var(--user-message-bg);
+    color: var(--user-message-color);
+    margin-left: auto;
+    /* border-right: 3px solid var(--user-message-bg); /* Opcional */
+}
+
+.user-message .bubble {
+     flex-grow: 1;
+     order: -1; /* Coloca la burbuja antes del avatar en mensajes de usuario */
+}
+
+.chat-input-area {
+    display: flex;
+    padding: 1rem;
+    background-color: var(--chat-bg);
+    border-top: 1px solid var(--panel-border);
+    gap: 0.8rem;
+    position: sticky;
+    bottom: 0;
+    align-items: center;
+}
+
+#chatInput {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    resize: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
+    min-height: 44px;
+    max-height: 120px;
+    outline: none; /* Eliminar outline por defecto */
+}
+
+#chatInput:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2); /* Sutil anillo de enfoque */
+}
+
+.magic-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    min-width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.magic-btn:hover {
+    background-color: #907EE1; /* Tono ligeramente más oscuro al pasar el ratón */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para el markdown */
+.bubble p {
+    margin-bottom: 0.5rem;
+}
+
+.bubble ul, .bubble ol {
+    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.bubble code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.bubble pre {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.8rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.bubble pre code {
+    background-color: transparent;
+    padding: 0;
+    white-space: pre-wrap;
+}
+
+/* Animación de carga */
+.typing-indicator {
+    display: flex;
+    gap: 0.3rem;
+    padding: 0.5rem;
+    align-items: center; /* Alinear los puntos verticalmente */
+}
+
+.typing-indicator .bubble {
+    background-color: transparent; /* Fondo transparente para la burbuja del indicador */
+    box-shadow: none; /* Sin sombra para el indicador */
+}
+
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    background-color: var(--typing-indicator-color); /* Color del indicador */
+    border-radius: 50%;
+    animation: typing 1s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Estilos para los paneles de respuesta */
+.bubble .panel {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+}
+
+.bubble .panel-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+}
+
+.bubble .panel-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+}
+
+/* Media queries para diferentes tamaños de pantalla */
+@media (max-width: 768px) {
+    .container {
+        margin: 0;
+        padding: 0.5rem;
+        height: 100vh;
+    }
+    
+    .header {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .chat-container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+    
+    .message {
+        max-width: 95%; /* Aumentar ancho en pantallas pequeñas */
+        font-size: 0.9rem;
+    }
+    
+    .message .avatar {
+        width: 25px;
+        height: 25px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0;
+    }
+    
+    .header {
+        padding: 0.8rem;
+        margin-bottom: 0.5rem;
+        border-radius: 0;
+    }
+    
+    .header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .chat-history {
+        padding: 0.8rem;
+    }
+    
+    .message {
+        max-width: 100%; /* Ocupar todo el ancho en pantallas muy pequeñas */
+        font-size: 0.85rem;
+        padding: 0.7rem 0.9rem;
+        gap: 0.4rem; /* Reducir espacio entre avatar y burbuja */
+    }
+     
+    .message .avatar {
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+    }
+
+    .chat-input-area {
+        padding: 0.8rem;
+        gap: 0.5rem;
+    }
+    
+    #chatInput {
+        font-size: 0.9rem;
+        padding: 0.7rem;
+    }
+    
+    .magic-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .bubble code {
+        font-size: 0.8rem;
+    }
+    
+    .bubble pre {
+        padding: 0.6rem;
+    }
+}
+
+/* Soporte para modo oscuro del sistema */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #1F2937; /* Fondo oscuro */
+        --chat-bg: #374151; /* Fondo de chat oscuro */
+        --bot-message-bg: #4B5563; /* Gris oscuro para mensajes del bot */
+        --user-message-bg: #A78BFA; /* Morado claro (mismo que en claro para consistencia) */
+        --user-message-color: #FFFFFF; /* Texto blanco */
+        --panel-bg: #374151; /* Fondo de paneles oscuro */
+        --panel-border: #4B5563; /* Borde gris oscuro */
+        --text-color: #F3F4F6; /* Texto claro */
+        --text-secondary: #D1D5DB; /* Texto secundario gris claro */
+        --typing-indicator-color: #84CC16; /* Verde lima (mismo que en claro) */
+    }
+    
+    .bubble code {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .bubble pre {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    #chatInput {
+        background-color: #374151;
+        color: var(--text-color);
+        border-color: var(--panel-border);
+    }
+    
+    #chatInput::placeholder {
+        color: var(--text-secondary);
+    }
+
+     .message .avatar {
+        background-color: var(--panel-border); 
+        color: var(--text-secondary);
+    }
+
+     #chatInput:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3); /* Sutil anillo de enfoque en oscuro */
+    }
+}
+
+.avatar.github-bot {
+    background: linear-gradient(135deg, #2b3137, #24292e);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #f6f8fa;
+    animation: githubPulse 3s infinite alternate;
+}
+
+.avatar.github-bot i {
+    font-size: 22px;
+    position: relative;
+    z-index: 2;
+    animation: scaleGithub 2s ease infinite;
+    color: #f6f8fa;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes githubPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+}
+
+@keyframes scaleGithub {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.avatar.github-bot::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(246, 248, 250, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    animation: githubShine 4s infinite;
+    transform-origin: center center;
+}
+
+@keyframes githubShine {
+    0% {
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+    30% {
+        opacity: 0.8;
+    }
+    70% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(360deg);
+    }
+}
+
+.avatar.ollama-bot {
+    background: linear-gradient(135deg, #ff9a00, #ff4e00);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 154, 0, 0.6);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #fff3e6;
+    animation: ollamaPulse 3s infinite alternate;
+}
+
+.avatar.ollama-bot span {
+    position: relative;
+    z-index: 2;
+    animation: bounce 2s ease infinite;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+}
+
+@keyframes ollamaPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(255, 154, 0, 0.4);
+    }
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 154, 0, 0.7);
+    }
+}
+
+.avatar.ollama-bot::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    opacity: 0;
+    animation: ollamaGlow 4s infinite;
+}
+
+@keyframes ollamaGlow {
+    0% {
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+    25% {
+        opacity: 0.8;
+    }
+    75% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 0;
+        transform: rotate(360deg);
+    }
+}
+
+/* Animación de carga (tres puntos) */
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+}
+
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  float: left;
+  margin: 0 2px;
+  background-color: #9E9EA1;
+  display: block;
+  border-radius: 50%;
+  opacity: 0.4;
+}
+
+.typing-indicator span:nth-of-type(1) {
+  animation: 1s bouncing infinite;
+}
+
+.typing-indicator span:nth-of-type(2) {
+  animation: 1s bouncing infinite .33s;
+}
+
+.typing-indicator span:nth-of-type(3) {
+  animation: 1s bouncing infinite .66s;
+}
+
+@keyframes bouncing {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-3px);
+    }
+}
+
+/* Botón de envío mejorado */
+.magic-btn {
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 100px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.magic-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    transition: all 0.5s;
+    opacity: 0;
+}
+
+.magic-btn:hover::before {
+    animation: shine 1.5s ease-in-out;
+}
+
+@keyframes shine {
+    0% {
+        left: -50%;
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        left: 150%;
+        opacity: 0;
+    }
+}
+
+.magic-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+}
+
+.magic-btn i {
+    font-size: 16px;
+}
+
+/* Estilos para los botones de modo */
+#modeSelector {
+    background-color: #222;
+    padding: 3px;
+    border-radius: 20px;
+    display: flex;
+    margin-right: 5px;
+}
+
+.mode-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #2a2a2a;
+    color: #888;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.mode-btn.selected {
+    background: linear-gradient(135deg, var(--magic-color-2), var(--magic-color-3));
+    color: white;
+    box-shadow: 0 0 10px rgba(66, 214, 255, 0.5);
+}
+
+.mode-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(66, 214, 255, 0.4);
+}
+
+.mode-btn.selected:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 12px rgba(66, 214, 255, 0.6);
+}
+
+/* Animación para los botones del selector de modo */
+.mode-btn i, .mode-btn span {
+    transition: transform 0.3s ease;
+}
+
+.mode-btn:hover i, .mode-btn:hover span {
+    transform: scale(1.2);
+}
+
+.mode-btn.selected i, .mode-btn.selected span {
+    animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.15);
+    }
+}
+
+.avatar-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    opacity: 0;
+    animation: shineEffect 3s infinite;
+    transform: translateX(-100%);
+    pointer-events: none;
+}
+
+@keyframes shineEffect {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.8;
+    }
+    40% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}

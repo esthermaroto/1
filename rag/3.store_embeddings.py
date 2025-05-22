@@ -1,7 +1,7 @@
 from calendar import c
 import sys
 from httpx import get
-from openai import OpenAI
+# from openai import OpenAI # Comentamos la importación de OpenAI
 from dotenv import load_dotenv
 import os
 import tiktoken
@@ -11,16 +11,14 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from rich.console import Console
 from rich.progress import track
+import google.generativeai as genai # Importamos la librería de Google AI
 
 load_dotenv()
 console = Console()
 
 collection_name = os.getenv("QDRANT_COLLECTION_NAME")
 
-client = OpenAI(
-    base_url=os.getenv("GITHUB_MODELS_URL"),
-    api_key=os.getenv("GITHUB_TOKEN"),
-)
+# genai.configure(api_key=os.getenv("GITHUB_TOKEN")) # Commenting out this line
 
 # Inicializar el cliente de Qdrant
 qdrant_client = QdrantClient(url=os.getenv("QDRANT_URL"))
@@ -122,16 +120,18 @@ def process_markdown_files(markdown_files):
             for i, chunk in enumerate(chunks):
                 status.update(f"[bold green]Procesando fragmento {i+1}/{len(chunks)} de {file_name}[/bold green]")
                 try:
-                    response = client.embeddings.create(
+                    # Usamos la librería de Google AI para generar embeddings
+                    response = genai.embed_content(
                         model=os.getenv("GITHUB_MODELS_MODEL_FOR_EMBEDDINGS"),
-                        input=chunk
+                        content=chunk
                     )
-                    all_embeddings.append((response, title, i))
+                    # La respuesta de genai.embed_content es diferente a la de openai
+                    all_embeddings.append((response['embedding'], title, i))
                 except Exception as e:
                     console.print(f":x: [red]Error al procesar el fragmento {i+1} del archivo {file_name}: {e}[/red]")
             
-            for i, (embedding_response, file_title, chunk_index) in enumerate(all_embeddings):
-                vector = embedding_response.data[0].embedding
+            for i, (vector, file_title, chunk_index) in enumerate(all_embeddings):
+                # La variable vector ya contiene la lista de floats
                 qdrant_client.upsert(
                     collection_name=collection_name,
                     points=[{
@@ -152,10 +152,7 @@ def process_markdown_files(markdown_files):
 
 console.print(":sparkles: [bold green]Iniciando el proceso de creación de embeddings...[/bold green]")
 
-console.print(":wastebasket: [yellow]Eliminando la colección anterior de Qdrant (si existe)...[/yellow]")
-recreate_qdrant_collection()
-
-markdown_dir_path = "youtube_guides"
+markdown_dir_path = "../youtube_guides"
 markdown_files = get_markdown_files(markdown_dir_path)
 console.print(f":mag: [cyan]Se encontraron [bold]{len(markdown_files)}[/bold] archivos Markdown para procesar.[/cyan]")
 
