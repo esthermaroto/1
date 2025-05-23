@@ -1,9 +1,38 @@
+version: '3.8'
 services:
   app:
-    image: mcr.microsoft.com/devcontainers/python:1-3.12-bullseye   
+    # Establece el contexto de construcción en la raíz del proyecto (directorio superior)
+    build: 
+      context: ..
+      # Especifica la ruta al Dockerfile dentro del contexto
+      dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ../..:/workspaces:cached    
-    command: sleep infinity
+      # Monta el directorio raíz del proyecto dentro del workspaceFolder
+      - C:/Users/esthe/Desktop/IA-Generativa:/workspaces/${localWorkspaceFolderBasename}    
+    # Comando para iniciar la aplicación FastAPI con Uvicorn
+    command: uvicorn app:app --host 0.0.0.0 --port 8000
+    ports:
+      - 8000:8000 # Mapea el puerto 8000 para la interfaz web
+    # Carga las variables de entorno desde el archivo .env
+    env_file: ../.env
+    depends_on:
+      - qdrant # Asegura que Qdrant se inicie antes que 'app'
+    environment: # Tus variables de entorno para el servicio 'app'
+      GITHUB_MODELS_MODEL_FOR_EMBEDDINGS: models/embedding-001
+      GITHUB_MODELS_MODEL_FOR_GENERATION: models/gemini-1.5-flash-latest
+      GITHUB_MODELS_URL: https://generativelanguage.googleapis.com/
+      GOOGLE_API_KEY: AIzaSyAZ1SJ2PZfjin30oVdUp97QOMpZxGyljmU
+      QDRANT_COLLECTION_NAME: info-ficzone
+      # ¡IMPORTANTE! Qdrant está en la misma red de Docker Compose, usa su nombre de servicio
+      QDRANT_URL: http://qdrant:6333
+    # Si usas GPUs para Ollama o tu app principal, puedes añadir la configuración aquí:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
 
   qdrant:
     image: qdrant/qdrant:v1.14.0
@@ -11,7 +40,8 @@ services:
       - 6333:6333
     volumes:
       - qdrant-storage:/qdrant/storage
+    container_name: qdrant_service # Un nombre amigable para el contenedor de Qdrant
+    restart: unless-stopped # Asegura que Qdrant se reinicie si el contenedor se detiene inesperadamente
 
 volumes:
   qdrant-storage:
-    

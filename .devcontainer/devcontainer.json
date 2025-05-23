@@ -1,29 +1,38 @@
 {
-	"name": "Hoy empiezo con IA Generativa 📖🤖",
-	"dockerComposeFile": "compose.yml",
-	"service": "app",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	"features": {
-		"ghcr.io/prulloac/devcontainer-features/ollama:1": {},
-		"ghcr.io/devcontainers-extra/features/ffmpeg-apt-get:1": {}
-	},
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"ms-windows-ai-studio.windows-ai-studio",
-				"GitHub.copilot",
-				"GitHub.copilot-chat",
-				"ms-toolsai.prompty",
-				"ritwickdey.LiveServer"
-			]
-		}
-	},
-	"hostRequirements": {
-		"memory": "15gb",
-		"cpus": 4
-	},
-	"forwardPorts": [
-		6333		
-	],
-	"postCreateCommand": "pip install --upgrade pip"
+    "name": "IA Generativa ",
+    "dockerComposeFile": "compose.yml", //Correcto, apunta al compose.yml en la misma carpeta
+    "service": "app", // Correcto, usa el servicio 'app' como tu entorno principal
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+    "features": {
+        "ghcr.io/prulloac/devcontainer-features/ollama:1": {},
+        "ghcr.io/devcontainers-extra/features/ffmpeg-apt-get:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-windows-ai-studio.windows-ai-studio",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "ms-toolsai.prompty",
+                "ritwickdey.LiveServer"
+                // No se necesitan extensiones específicas de Qdrant.
+            ]
+        }
+    },
+    "hostRequirements": {
+        "memory": "15gb",
+        "cpus": 4
+    },
+    "forwardPorts": [
+        6333,       // Este puerto ahora lo usará Qdrant (o el puerto que hayas elegido si hubo conflicto)
+        8000        // El puerto 8000 de tu aplicación Uvicorn
+        // , 6334   # Descomenta si mapeaste el puerto gRPC de Qdrant y quieres accederlo desde el host
+    ],
+    "postCreateCommand": "pip install --upgrade pip"
+    // Si tu código Python en el servicio 'app' interactúa con Qdrant,
+    // es crucial instalar el cliente de Qdrant aquí para que esté disponible:
+    // "postCreateCommand": "pip install --upgrade pip qdrant-client"
+    // O si ya tienes un requirements.txt, asegúrate de que esté listado ahí:
+    // "postCreateCommand": "pip install --upgrade pip && pip install -r requirements.txt"
 }

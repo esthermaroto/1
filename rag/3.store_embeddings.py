@@ -17,7 +17,7 @@ load_dotenv()
 console = Console()
 
 # Configure Google AI API explicitly in this script
-print(f"DEBUG: GOOGLE_API_KEY value after load_dotenv in 3.store_embeddings.py: {os.getenv("GOOGLE_API_KEY")}") # Added debug print
+print(f"DEBUG: GOOGLE_API_KEY value after load_dotenv in 3.store_embeddings.py: {os.getenv('GOOGLE_API_KEY')}") # Added debug print
 genai.configure(
     api_key=os.getenv("GOOGLE_API_KEY")
 )

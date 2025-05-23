@@ -17,7 +17,7 @@ sys.path.insert(0, PROJECT_ROOT)
 load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, '.env'))
 
 # Configure Google AI API explicitly in app.py
-print(f"DEBUG: GOOGLE_API_KEY value after load_dotenv in app.py: {os.getenv("GOOGLE_API_KEY")}")
+print(f"DEBUG: GOOGLE_API_KEY value after load_dotenv in app.py: {os.getenv('GOOGLE_API_KEY')}")
 genai.configure(
     api_key=os.getenv("GOOGLE_API_KEY")
 )

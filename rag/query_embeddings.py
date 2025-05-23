@@ -14,7 +14,7 @@ console = Console()
 collection_name = os.getenv("QDRANT_COLLECTION_NAME")
 
 # Configurar la API de Google AI
-print(f"DEBUG: GOOGLE_API_KEY value: {os.getenv("GOOGLE_API_KEY")}") # Added debug print
+print(f"DEBUG: GOOGLE_API_KEY value: {os.getenv('GOOGLE_API_KEY')}") # Added debug print
 genai.configure(
     api_key=os.getenv("GOOGLE_API_KEY") # Usamos GOOGLE_API_KEY para la clave de Google AI
 )
@@ -30,7 +30,7 @@ def query_embeddings(query):
     console.print(":mag: [bold cyan]Generando embedding para la consulta...[/bold cyan]")
     
     # Usar el modelo de embeddings de Google AI
-    print(f"DEBUG: GOOGLE_API_KEY value before embed_content: {os.getenv("GOOGLE_API_KEY")}") # Added debug print
+    print(f"DEBUG: GOOGLE_API_KEY value before embed_content: {os.getenv('GOOGLE_API_KEY')}") # Added debug print
     embedding_response = genai.embed_content(
         model=EMBEDDING_MODEL,
         content=query,
@@ -87,17 +87,17 @@ def generate_response_with_embeddings(query, search_results):
                 Respuesta concisa:"""
 
     # Configurar el modelo con un prompt del sistema reforzado en concisión y sin fuentes
-    system_prompt = """Eres un asistente experto y amigable especializado en creación de contenido para YouTube.
-                      Tu objetivo es ayudar a los usuarios de manera cordial, profesional, muy directa y concisa.
+    system_prompt = """Eres un asistente experto y amigable especializado en FicZone 2025.
+                      Tu objetivo es ayudar a los usuarios de manera cordial, profesional y directa.
                       Características de tus respuestas:
                       - Usa un tono conversacional y cercano, pero siempre ve al grano.
                       - Sé empático y comprensivo.
-                      - Proporciona información clara y bien estructurada de forma breve.
-                      - **Eres EXTREMADAMENTE directo y conciso. Evita cualquier frase o información que no sea estrictamente necesaria para responder la consulta.**
-                      - Incluye ejemplos prácticos SOLO si son esenciales y cortos.
+                      - Proporciona información clara y bien estructurada.
+                      - Cuando te pregunten por los invitados, SIEMPRE responde con una lista numerada, donde cada invitado esté en una línea nueva.
+                      - Si la información es sobre horarios, también preséntala en formato de lista numerada y con su hora correspondiente.
+                      - Si te preguntan por las entradas proporciona el precio y este link http://entradasytickets.com/entradas/38 tal cual.
                       - Si no tienes suficiente información, indícalo de manera cordial y sin rodeos.
-                      - Mantén un balance entre profesionalismo y extrema concisión.
-                      - Cuando presentes listas de elementos (ej. nombres, horarios), formatéalos claramente usando viñetas o números para facilitar la lectura, pero mantén la lista lo más breve posible.
+                      - Mantén un balance entre profesionalismo y claridad.
                       - **Bajo NINGUNA circunstancia menciones las fuentes de información (archivos, documentos, fragmentos, etc.). Actúa como si la información fuera de tu conocimiento general.**
                       - **NO inicies tus respuestas con saludos como 'Hola', '¡Hola!', etc. Ve directamente a responder la consulta.**"""
 
