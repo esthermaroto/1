@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>🤖 Asistente de FicZone</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="/static/img/logo_ficzone.png" alt="Logo de FicZone" class="ficzone-logo">
+            <h1><img src="/static/img/robot.png" alt="Robot Icon" class="header-robot-icon"> Asistente de FicZone <span class="sparkle">✨</span></h1>
+            <p class="subtitle">Haz tus preguntas sobre el evento FicZone, programación, invitados y más.</p>
+        </div>
+        <div class="chat-container">
+            <div id="chatHistory" class="chat-history">
+                <!-- Los mensajes se insertarán aquí por JS -->
+            </div>
+            <div class="chat-input-area">
+                <textarea id="chatInput" placeholder="Escribe tu pregunta sobre FicZone..." rows="1"></textarea>
+                <button id="sendBtn" class="magic-btn">
+                    <span>Enviar</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/ui.js"></script>
+</body>
+
+</html>
